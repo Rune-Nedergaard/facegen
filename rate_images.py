@@ -3,7 +3,6 @@ import random
 
 import pandas as pd
 import streamlit as st
-import streamlit.components.v1 as components
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FOLDER = os.path.join(BASE_DIR, "subset_300_white_men_20_35")
@@ -120,29 +119,6 @@ if "discarded_by_participant" not in st.session_state:
 st.title("Image rating task")
 
 
-def keyboard_listener():
-    return components.html(
-        """
-        <script>
-        addEventListener("keydown", e => {
-          if (["1","2","3","4","5","6"].includes(e.key)) {
-            e.preventDefault();
-            Streamlit.setComponentValue(e.key);
-          }
-        });
-        </script>
-        """,
-        height=0,
-    )
-
-
-key = keyboard_listener()
-if key:
-    if key == "6":
-        discard_current_image()
-    elif key in {"1", "2", "3", "4", "5"}:
-        record_rating(int(key))
-
 images = st.session_state.images
 if not images:
     st.error("No images found.")
@@ -163,18 +139,19 @@ if col_participant_2.button("Group member 2"):
 col1, col2 = st.columns(2)
 col1.subheader(f"{idx + 1}/{len(images)}")
 col1.image(photo, use_container_width=True)
-col2.write("#")
 
-rating = col2.slider("Rating (1–5)", 1, 5, key="rating_slider")
-col2.caption("Use the mouse or press 1–5 on the keyboard. Press 6 to discard the image.")
+st.markdown("### Rate this image")
+button_cols = st.columns(6)
+for i, label in enumerate(["1", "2", "3", "4", "5", "Discard"]):
+    with button_cols[i]:
+        if label == "Discard":
+            if st.button(label, key=f"discard_{idx}", use_container_width=True):
+                discard_current_image()
+        else:
+            if st.button(label, key=f"rating_{label}_{idx}", use_container_width=True):
+                record_rating(int(label))
 
-if col2.button("Save rating & next ⏭️"):
-    record_rating(int(rating))
-
-if col2.button("Discard image 🚫"):
-    discard_current_image()
-
-if col2.button("⬅️ Back"):
+if st.button("⬅️ Back"):
     if st.session_state.counter > 0:
         st.session_state.counter -= 1
         st.rerun()
