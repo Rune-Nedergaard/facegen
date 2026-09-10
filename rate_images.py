@@ -3,17 +3,18 @@ import random
 import pandas as pd
 import streamlit as st
 
-FOLDER = r"/Users/fredhb/Desktop/DTU_projects/Kareninator-keerthi/data/preprocessed_data"
+FOLDER = r"/Users/fredhb/Documents/finished_dtu_projects/Kareninator-keerthi/data/generated_images"
+#FOLDER = r"C:\Users\desus\OneDrive - Danmarks Tekniske Universitet\Fall_2025\Cognitive_Modelling\Kareninator\data\generated_images"
 RANDOM_SEED = 22
 
 # ---- init ----
 if "images" not in st.session_state:
     paths = [os.path.join(FOLDER, f) for f in os.listdir(FOLDER)]
     valid = [p for p in paths if os.path.splitext(p)[1].lower() in {".jpg",".jpeg",".png",".webp",".bmp"}]
-    # duplicate each image once
-    doubled = valid * 2
-    random.Random(RANDOM_SEED).shuffle(doubled)
-    st.session_state.images = doubled
+    # show each image ten times
+    times_ten = valid * 10
+    random.Random(RANDOM_SEED).shuffle(times_ten)
+    st.session_state.images = times_ten
 
 if "counter" not in st.session_state:
     st.session_state.counter = 0
@@ -33,7 +34,7 @@ filename = os.path.basename(photo)
 
 col1, col2 = st.columns(2)
 col1.subheader(f"{idx+1}/{len(images)}")
-col1.image(photo, caption=filename, use_container_width=True)
+col1.image(photo, use_container_width=True) # removed caption=filename to avoid bias 
 col2.write("#")
 
 # Unique slider key per "instance" of image (filename + position in list)
