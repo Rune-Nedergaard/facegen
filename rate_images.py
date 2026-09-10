@@ -3,8 +3,8 @@ import random
 import pandas as pd
 import streamlit as st
 
-FOLDER = r"/Users/fredhb/Documents/finished_dtu_projects/Kareninator-keerthi/data/generated_images"
-#FOLDER = r"C:\Users\desus\OneDrive - Danmarks Tekniske Universitet\Fall_2025\Cognitive_Modelling\Kareninator\data\generated_images"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FOLDER = os.path.join(BASE_DIR, "subset_300_white_men_20_35")
 RANDOM_SEED = 22
 
 # ---- init ----
