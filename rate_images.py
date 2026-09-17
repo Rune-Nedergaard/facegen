@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FOLDER = os.path.join(BASE_DIR, "subset_300_white_men_20_35")
+FOLDER = os.path.join(BASE_DIR, "synthetic_images")
 RANDOM_SEED = 22
 
 
